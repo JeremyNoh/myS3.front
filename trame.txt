@@ -1,0 +1,35 @@
+--------------
+  Home       |
+--------------
+Presentation du projet
+bouton SignIn SIgnUp
+
+--------------
+  register   |
+--------------
+Formulaire inscription
+button Connexion
+ou inscription
+
+--------------
+  login      |
+--------------
+Formulaire connexion
+button Connexion ==> Profil
+ou inscription
+
+--------------
+  Bucket     |
+--------------
+
+Menu : /BucketActive /Profil / disconnect /
+
+List des buckets
+Bouton ajout Bucket
+
+--------------
+  Blobs      |
+--------------
+Menu : /Bucket /Profil / disconnect /
+List des Blobs
+Bouton upload un Blobs
