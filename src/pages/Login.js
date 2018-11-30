@@ -1,18 +1,58 @@
 import React, { Component } from "react";
 import { TextInput, Button, toaster, Pane, Text } from "evergreen-ui";
 
+import { Redirect } from "react-router-dom";
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nickname: "",
-      password: ""
+      password: "",
+      success: false
     };
   }
+
+  login = async () => {
+    let { nickname, password } = this.state;
+    let user = {};
+    user.nickname = nickname;
+    user.password = password;
+
+    const response = await fetch("http://localhost:5000/api/auth/login", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(user)
+    });
+
+    const json = await response.json();
+
+    if (json.data) {
+      toaster.success(" You are connected", {
+        duration: 3
+      });
+      this.props.handleUser(json.data.user, json.meta);
+      this.setState({ success: true }, () => {
+        this.goToDashboard();
+      });
+    } else {
+      this.setState({ password: "" });
+      toaster.danger(`${(json.err.description, json.err.fields)}`, {
+        duration: 5
+      });
+    }
+  };
 
   handleChange = event => {
     let { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+  goToDashboard = () => {
+    if (this.state.success) {
+      return <Redirect to="/somewhere/else" />;
+    }
   };
 
   render() {
@@ -59,10 +99,11 @@ export default class Login extends Component {
             marginRight={16}
             appearance="primary"
             intent="success"
-            onClick={this.join}
+            onClick={this.login}
           >
             Submit
           </Button>
+          {this.goToDashboard()}
         </Pane>
       </div>
     );

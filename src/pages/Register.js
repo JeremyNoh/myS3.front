@@ -34,17 +34,14 @@ export default class Register extends Component {
     });
     const json = await response.json();
     if (json.data) {
-      this.setState({ user: json.data }, () => {
-        toaster.success("User crée", {
-          duration: 3
-        });
-        console.log(this.state.user);
+      this.props.handleUser(json.data.user, json.meta);
+      toaster.success("User crée", {
+        duration: 3
       });
     } else {
       this.setState({ password: "", passwordConfirmation: "" });
-      // REMONTE LA DONNER AU COMPOSANT PARENT
-      toaster.danger("error , please retry ", {
-        duration: 3
+      toaster.danger(`${(json.err.description, json.err.fields)}`, {
+        duration: 5
       });
     }
   }
@@ -98,7 +95,8 @@ export default class Register extends Component {
           <TextInput
             label="A controlled text input field"
             required
-            description="This is a description."
+            placeholder="Nickname"
+            marginBottom={25}
             value={nickname}
             name="nickname"
             onChange={this.handleChange}
@@ -108,7 +106,8 @@ export default class Register extends Component {
             label="A controlled text input field"
             required
             type="email"
-            description="This is a description."
+            placeholder="Email"
+            marginBottom={25}
             value={email}
             name="email"
             onChange={this.handleChange}
@@ -117,7 +116,8 @@ export default class Register extends Component {
           <TextInput
             label="A controlled text input field"
             required
-            description="This is a description."
+            placeholder="Password"
+            marginBottom={25}
             value={password}
             type="password"
             name="password"
@@ -127,14 +127,14 @@ export default class Register extends Component {
           <TextInput
             label="A controlled text input field"
             required
-            description="This is a description."
+            marginBottom={25}
+            placeholder="PasswordConfirmation"
             value={passwordConfirmation}
             type="password"
             name="passwordConfirmation"
             onChange={this.handleChange}
           />
 
-          <br />
           <Button
             disabled={!nickname || !email || !password || !passwordConfirmation}
             marginRight={16}
