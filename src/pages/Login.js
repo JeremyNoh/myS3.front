@@ -51,7 +51,7 @@ export default class Login extends Component {
   };
   goToDashboard = () => {
     if (this.state.success) {
-      return <Redirect to="/somewhere/else" />;
+      return <Redirect to="/bucket" />;
     }
   };
 

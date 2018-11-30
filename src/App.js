@@ -36,10 +36,15 @@ class App extends Component {
 
   logout = () => {
     localStorage.removeItem(APP_NAME);
-    this.setState({
-      isConnected: false,
-      user: null
-    });
+    this.setState(
+      {
+        isConnected: false,
+        user: null
+      },
+      () => {
+        // window.location.href = "/";
+      }
+    );
 
     // REDIRECT
   };
@@ -65,22 +70,30 @@ class App extends Component {
                 <Menu>
                   <Menu.Group title="Home">
                     <Menu.Item icon="home">
-                      <Link to="/">Home</Link>
+                      <Link to="/" color="neutral">
+                        Home
+                      </Link>
                     </Menu.Item>
 
                     {isConnected && (
                       <Menu.Item icon="people">
-                        <Link to="/dashboard">Dashboard</Link>
+                        <Link to="/dashboard" color="neutral">
+                          Dashboard
+                        </Link>
                       </Menu.Item>
                     )}
                     {!isConnected && (
                       <Menu.Item icon="edit">
-                        <Link to="/auth/login">SignIn</Link>
+                        <Link to="/auth/login" color="neutral">
+                          SignIn
+                        </Link>
                       </Menu.Item>
                     )}
                     {!isConnected && (
                       <Menu.Item icon="mugshot">
-                        <Link to="/auth/register">SignUp</Link>
+                        <Link to="/auth/register" color="neutral">
+                          SignUp
+                        </Link>
                       </Menu.Item>
                     )}
                   </Menu.Group>
@@ -88,7 +101,7 @@ class App extends Component {
                   {isConnected && (
                     <Menu.Group title="Connection">
                       <Menu.Item icon="power" intent="danger">
-                        <a href="#" onClick={this.logout}>
+                        <a href="/" onClick={this.logout}>
                           SignOut
                         </a>
                       </Menu.Item>

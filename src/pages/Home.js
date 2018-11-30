@@ -17,7 +17,7 @@ export default class Home extends Component {
           Vous retrouvez votre espace privée sécurisé .... Ou pas
         </Paragraph>
         <Pane marginTop={22}>
-          <Link to="/auth/login">
+          <Link to="/auth/login" color="neutral">
             <Button
               appearance="primary"
               intent="success"
@@ -26,7 +26,7 @@ export default class Home extends Component {
               SignIn
             </Button>
           </Link>
-          <Link to="/auth/register">
+          <Link to="/auth/register" color="neutral">
             <Button appearance="primary">SIgnUp</Button>
           </Link>
         </Pane>
