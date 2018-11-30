@@ -1,24 +1,150 @@
 import React, { Component } from "react";
-import {
-  TextInput,
-  Button,
-  toaster,
-  Paragraph,
-  SideSheet,
-  FormField,
-  Table
-} from "evergreen-ui";
+import { TextInput, Button, toaster, Text, Pane } from "evergreen-ui";
 
 export default class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      nickname: "",
+      email: "",
+      password: "",
+      passwordConfirmation: ""
+    };
   }
 
+  // async componentDidMount() {
+  //   const token = "dedededed";
+  //
+  //   const response = await fetch("http://localhost", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`
+  //     }
+  //   });
+  //   const json = await response.json();
+  //   this.setState({ user: [json.data] });
+  // }
+
+  async post(user) {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      headers: {
+        "Content-Type": `application/json`
+      },
+      method: "POST",
+      body: JSON.stringify(user)
+    });
+    const json = await response.json();
+    if (json.data) {
+      this.setState({ user: json.data }, () => {
+        toaster.success("User crée", {
+          duration: 3
+        });
+        console.log(this.state.user);
+      });
+    } else {
+      this.setState({ password: "", passwordConfirmation: "" });
+      // REMONTE LA DONNER AU COMPOSANT PARENT
+      toaster.danger("error , please retry ", {
+        duration: 3
+      });
+    }
+  }
+
+  handleChange = event => {
+    let { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  register = () => {
+    let { nickname, email, password, passwordConfirmation } = this.state;
+    if (password.length < 5) {
+      toaster.danger("The password is too small", {
+        duration: 3
+      });
+      this.setState({ password: "", passwordConfirmation: "" });
+      return;
+    } else if (password === passwordConfirmation) {
+      let user = {};
+      user.nickname = nickname;
+      user.email = email;
+      user.password = password;
+      user.passwordConfirmation = passwordConfirmation;
+      this.post(user);
+    } else {
+      toaster.danger("The password is not the same", {
+        duration: 3
+      });
+      this.setState({ password: "", passwordConfirmation: "" });
+    }
+  };
+
   render() {
+    const { nickname, email, password, passwordConfirmation } = this.state;
+
     return (
       <div className="AppContent">
-        <h1> Register</h1>
+        <Pane
+          elevation={0}
+          width={400}
+          height={500}
+          background="tint2"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          flexDirection="column"
+        >
+          <h1> Register</h1>
+
+          <Text>Username : </Text>
+          <TextInput
+            label="A controlled text input field"
+            required
+            description="This is a description."
+            value={nickname}
+            name="nickname"
+            onChange={this.handleChange}
+          />
+          <Text>Email : </Text>
+          <TextInput
+            label="A controlled text input field"
+            required
+            type="email"
+            description="This is a description."
+            value={email}
+            name="email"
+            onChange={this.handleChange}
+          />
+          <Text>Password :</Text>
+          <TextInput
+            label="A controlled text input field"
+            required
+            description="This is a description."
+            value={password}
+            type="password"
+            name="password"
+            onChange={this.handleChange}
+          />
+          <Text>Password Confirmation :</Text>
+          <TextInput
+            label="A controlled text input field"
+            required
+            description="This is a description."
+            value={passwordConfirmation}
+            type="password"
+            name="passwordConfirmation"
+            onChange={this.handleChange}
+          />
+
+          <br />
+          <Button
+            disabled={!nickname || !email || !password || !passwordConfirmation}
+            marginRight={16}
+            appearance="primary"
+            intent="success"
+            onClick={this.register}
+          >
+            Submit
+          </Button>
+        </Pane>
       </div>
     );
   }
