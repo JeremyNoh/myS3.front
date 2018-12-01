@@ -12,7 +12,8 @@ import {
   FormField,
   Tooltip,
   Position,
-  IconButton
+  IconButton,
+  Popover
 } from "evergreen-ui";
 
 import jwt from "jsonwebtoken";
@@ -29,6 +30,7 @@ export default class Bucket extends Component {
       token: undefined,
       buckets: [],
       isShown: false,
+      isShowPut: false,
       name: ""
     };
   }
@@ -49,7 +51,6 @@ export default class Bucket extends Component {
         }
       );
       const json = await response.json();
-      console.log(json.data.buckets);
       this.setState({
         buckets: json.data.buckets,
         uuid,
@@ -84,7 +85,7 @@ export default class Bucket extends Component {
       toaster.success("Bucket crée", {
         duration: 3
       });
-      this.setState({ buckets });
+      this.setState({ buckets, name: "" });
     } else {
       toaster.danger(`${(bucket.err.description, bucket.err.fields)}`, {
         duration: 5
@@ -119,6 +120,35 @@ export default class Bucket extends Component {
     }
   };
 
+  putBucket = async (index, id) => {
+    console.log(index, id);
+    const { uuid, name, token, buckets } = this.state;
+    const response = await fetch(
+      `http://localhost:5000/api/users/${uuid}/buckets/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `application/json`
+        },
+        method: "PUT",
+        body: JSON.stringify({ name })
+      }
+    );
+    const bucket = await response;
+    console.log(bucket);
+    if (bucket.ok) {
+      buckets[index].name = name;
+      toaster.success("Bucket Modifié", {
+        duration: 3
+      });
+      this.setState({ buckets, name: "" });
+    } else {
+      toaster.danger(`${(bucket.err.description, bucket.err.fields)}`, {
+        duration: 5
+      });
+    }
+  };
+
   content = () => {
     const { buckets } = this.state;
     if (buckets.length > 0) {
@@ -141,7 +171,48 @@ export default class Bucket extends Component {
               <Text>{bucket.name}</Text>
               <Icon icon="folder-close" size={40} />
               <Pane>
-                <Icon icon="edit" color="teal" marginRight={16} />
+                <Popover
+                  bringFocusInside
+                  content={
+                    <Pane
+                      width={320}
+                      height={320}
+                      paddingX={40}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      justifyContent="center"
+                      flexDirection="column"
+                    >
+                      <Text>Change the Name : </Text>
+
+                      <FormField label="">
+                        <TextInput
+                          label="name"
+                          required
+                          name="name"
+                          placeholder={`${bucket.name}`}
+                          description="name of the bucket"
+                          autoFocus
+                          width="100%"
+                          value={this.state.name}
+                          onChange={this.handleChange}
+                        />
+                        <Button
+                          disabled={!this.state.name}
+                          marginRight={16}
+                          appearance="primary"
+                          intent="success"
+                          onClick={() => this.putBucket(index, bucket.id)}
+                        >
+                          Submit
+                        </Button>
+                      </FormField>
+                    </Pane>
+                  }
+                >
+                  <Icon icon="edit" color="teal" />
+                </Popover>
                 <Button
                   appearance="minimal"
                   onClick={() => this.delete(index, bucket.id)}
