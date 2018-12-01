@@ -51,7 +51,6 @@ export default class Dashboard extends Component {
 
   async putData(user) {
     const { token, uuid } = this.state;
-    console.log(user);
     const response = await fetch(`http://localhost:5000/api/users/${uuid}`, {
       headers: {
         "Content-Type": `application/json`,

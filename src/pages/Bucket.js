@@ -14,6 +14,7 @@ import {
 } from "evergreen-ui";
 
 import jwt from "jsonwebtoken";
+import { Redirect } from "react-router-dom";
 
 const APP_NAME = "myS3.app";
 
@@ -28,7 +29,8 @@ export default class Bucket extends Component {
       buckets: [],
       isShown: false,
       isShowPut: false,
-      name: ""
+      name: "",
+      success: false
     };
   }
 
@@ -146,6 +148,17 @@ export default class Bucket extends Component {
     }
   };
 
+  openBucket = id => {
+    if (this.state.success) {
+      return <Redirect to="/Blob" />;
+    }
+  };
+  doAClick = id => {
+    this.setState({ success: true }, () => {
+      this.openBucket(id);
+    });
+  };
+
   content = () => {
     const { buckets } = this.state;
     if (buckets.length > 0) {
@@ -164,6 +177,7 @@ export default class Bucket extends Component {
               justifyContent="center"
               alignItems="center"
               flexDirection="column"
+              onDoubleClick={() => this.doAClick(bucket.id)}
             >
               <Text>{bucket.name}</Text>
               <Icon icon="folder-close" size={40} />
@@ -272,6 +286,7 @@ export default class Bucket extends Component {
             </Button>
           </FormField>
         </Dialog>
+        {this.openBucket()}
         {this.content()}
       </div>
     );

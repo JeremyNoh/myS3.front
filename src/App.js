@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Bucket from "./pages/Bucket";
 import Dashboard from "./pages/Dashboard";
+import Blob from "./pages/Blob";
 
 const APP_NAME = "myS3.app";
 
@@ -142,6 +143,9 @@ class App extends Component {
           )}
           {isConnected && (
             <Route path="/bucket" render={props => <Bucket {...props} />} />
+          )}
+          {isConnected && (
+            <Route path="/blob" render={props => <Blob {...props} />} />
           )}
         </>
       </Router>
