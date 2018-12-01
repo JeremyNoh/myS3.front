@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TextInput, Button, Paragraph, Pane, minorScale } from "evergreen-ui";
+import { Button, Paragraph, Pane, minorScale } from "evergreen-ui";
 import { Link } from "react-router-dom";
 
 export default class Home extends Component {

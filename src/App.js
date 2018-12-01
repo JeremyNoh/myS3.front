@@ -74,7 +74,13 @@ class App extends Component {
                         Home
                       </Link>
                     </Menu.Item>
-
+                    {isConnected && (
+                      <Menu.Item icon="folder-close">
+                        <Link to="/bucket" color="neutral">
+                          Bucket
+                        </Link>
+                      </Menu.Item>
+                    )}
                     {isConnected && (
                       <Menu.Item icon="people">
                         <Link to="/dashboard" color="neutral">

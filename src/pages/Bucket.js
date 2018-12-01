@@ -3,7 +3,6 @@ import {
   TextInput,
   Button,
   toaster,
-  Table,
   Pane,
   Text,
   Paragraph,
@@ -11,8 +10,6 @@ import {
   Dialog,
   FormField,
   Tooltip,
-  Position,
-  IconButton,
   Popover
 } from "evergreen-ui";
 
@@ -181,7 +178,6 @@ export default class Bucket extends Component {
                       display="flex"
                       justifyContent="center"
                       alignItems="center"
-                      justifyContent="center"
                       flexDirection="column"
                     >
                       <Text>Change the Name : </Text>

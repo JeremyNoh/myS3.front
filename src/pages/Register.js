@@ -12,18 +12,6 @@ export default class Register extends Component {
     };
   }
 
-  // async componentDidMount() {
-  //   const token = "dedededed";
-  //
-  //   const response = await fetch("http://localhost", {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   });
-  //   const json = await response.json();
-  //   this.setState({ user: [json.data] });
-  // }
-
   async post(user) {
     const response = await fetch("http://localhost:5000/api/auth/register", {
       headers: {
