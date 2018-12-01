@@ -9,7 +9,10 @@ import {
   Paragraph,
   Icon,
   Dialog,
-  FormField
+  FormField,
+  Tooltip,
+  Position,
+  IconButton
 } from "evergreen-ui";
 
 import jwt from "jsonwebtoken";
@@ -89,26 +92,68 @@ export default class Bucket extends Component {
     }
   };
 
+  delete = async (index, id) => {
+    const { buckets, uuid, token } = this.state;
+    const response = await fetch(
+      `http://localhost:5000/api/users/${uuid}/buckets/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `application/json`
+        },
+        method: "DELETE"
+      }
+    );
+    const result = await response;
+    if (result.ok) {
+      toaster.success("Bucket Delete", {
+        duration: 3
+      });
+
+      delete buckets[index];
+      this.setState({ buckets });
+    } else {
+      toaster.danger(`${(result.err.description, result.err.fields)}`, {
+        duration: 5
+      });
+    }
+  };
+
   content = () => {
     const { buckets } = this.state;
     if (buckets.length > 0) {
       return (
         <Pane clearfix>
-          <Pane
-            elevation={4}
-            float="left"
-            width={200}
-            height={120}
-            margin={24}
-            display="flex"
-            backgroundColor="white"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-          >
-            <Text>Folder Two</Text>
-            <Icon icon="folder-close" size={40} />
-          </Pane>
+          {buckets.map((bucket, index) => (
+            <Pane
+              key={index}
+              elevation={index}
+              float="left"
+              width={200}
+              height={120}
+              margin={24}
+              display="flex"
+              backgroundColor="white"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+            >
+              <Text>{bucket.name}</Text>
+              <Icon icon="folder-close" size={40} />
+              <Pane>
+                <Icon icon="edit" color="teal" marginRight={16} />
+                <Button
+                  appearance="minimal"
+                  onClick={() => this.delete(index, bucket.id)}
+                >
+                  <Icon icon="ban-circle" color="danger" marginRight={16} />
+                </Button>
+                <Tooltip content={`created at :  ${bucket.created_at}`}>
+                  <Icon icon="info-sign" color="info" />
+                </Tooltip>
+              </Pane>
+            </Pane>
+          ))}
         </Pane>
       );
     } else {
