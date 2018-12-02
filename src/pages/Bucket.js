@@ -150,6 +150,7 @@ export default class Bucket extends Component {
 
   openBucket = id => {
     if (this.state.success) {
+      this.props.handlBucket(id);
       return <Redirect to="/Blob" />;
     }
   };

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { TextInput, Button, toaster, Text, Pane } from "evergreen-ui";
+import { Redirect } from "react-router-dom";
 
 export default class Register extends Component {
   constructor(props) {
@@ -23,6 +24,8 @@ export default class Register extends Component {
     const json = await response.json();
     if (json.data) {
       this.props.handleUser(json.data.user, json.meta);
+      this.setState({ success: true });
+
       toaster.success("User crée", {
         duration: 3
       });
@@ -33,6 +36,12 @@ export default class Register extends Component {
       });
     }
   }
+
+  goToDashboard = () => {
+    if (this.state.success) {
+      return <Redirect to="/bucket" />;
+    }
+  };
 
   handleChange = event => {
     let { name, value } = event.target;
@@ -133,6 +142,7 @@ export default class Register extends Component {
             Submit
           </Button>
         </Pane>
+        {this.goToDashboard()}
       </div>
     );
   }

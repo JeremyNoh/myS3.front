@@ -7,14 +7,13 @@ import {
   Text,
   Paragraph,
   Icon,
-  Dialog,
   FormField,
   Tooltip,
-  Popover
+  Popover,
+  FilePicker
 } from "evergreen-ui";
 
 import jwt from "jsonwebtoken";
-import { Redirect } from "react-router-dom";
 
 const APP_NAME = "myS3.app";
 
@@ -27,38 +26,77 @@ export default class Blob extends Component {
       email: undefined,
       token: undefined,
       blobs: [],
-      isShown: false,
-      isShowPut: false,
-      name: "",
-      success: false
+      name: ""
     };
   }
 
-  // async componentDidMount() {
-  //   const meta = JSON.parse(localStorage.getItem(APP_NAME));
-  //   if (meta) {
-  //     const token = meta.token;
-  //     const decoded = jwt.decode(meta.token);
-  //     const { uuid, nickname, email } = decoded;
-  //
-  //     const response = await fetch(
-  //       `http://localhost:5000/api/users/${uuid}/blobs`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`
-  //         }
-  //       }
-  //     );
-  //     const json = await response.json();
-  //     this.setState({
-  //       blobs: json.data.blobs,
-  //       uuid,
-  //       nickname,
-  //       email,
-  //       token
-  //     });
-  //   }
-  // }
+  async componentDidMount() {
+    const meta = JSON.parse(localStorage.getItem(APP_NAME));
+    if (meta) {
+      const token = meta.token;
+      const decoded = jwt.decode(meta.token);
+      const { uuid, nickname, email } = decoded;
+      const response = await fetch(
+        `http://localhost:5000/api/users/${uuid}/buckets/${
+          this.props.idBucket
+        }/blobs`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      const json = await response.json();
+      this.setState({
+        blobs: json.data.blobs,
+        uuid,
+        nickname,
+        email,
+        token
+      });
+    }
+  }
+
+  post = async file => {
+    const { uuid, token, blobs } = this.state;
+
+    console.log(file);
+    const { name: originalname, size } = file[0];
+    let data = new FormData();
+    data.append("file", file);
+    data.append("originalname", originalname);
+
+    console.log(data);
+
+    const response = await fetch(
+      `http://localhost:5000/api/users/${uuid}/buckets/${
+        this.props.idBucket
+      }/blobs`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": `multipart/form-data`
+        },
+        method: "POST"
+      }
+    );
+
+    const blob = await response;
+    // const blob = await response.json();
+    console.log(blob);
+    //
+    if (blob.id) {
+      blobs.push(blob);
+      toaster.success("Blobs crée", {
+        duration: 3
+      });
+      this.setState({ blobs, name: "" });
+    } else {
+      toaster.danger(`Error, Somethings wong `, {
+        duration: 5
+      });
+    }
+  };
 
   content = () => {
     const { blobs } = this.state;
@@ -141,7 +179,7 @@ export default class Blob extends Component {
     } else {
       return (
         <Paragraph>
-          Vous n'avez pas de blob, Je t'invite à en ajouté un
+          Vous n'avez pas de blob, Je vous invite à en ajouter un
         </Paragraph>
       );
     }
@@ -151,42 +189,12 @@ export default class Blob extends Component {
     return (
       <div className="AppContent">
         <h1> blob</h1>
-        <Button
-          marginRight={16}
-          iconBefore="folder-new"
-          intent="success"
-          marginBottom={16}
-          onClick={() => this.setState({ isShown: true })}
-        >
-          Add a blob
-        </Button>
-        <Dialog
-          isShown={this.state.isShown}
-          title="Add a blob"
-          onCloseComplete={() => this.setState({ isShown: false })}
-          hasFooter={false}
-        >
-          <FormField label="">
-            <Text>Username : </Text>
-            <TextInput
-              label="name"
-              required
-              name="name"
-              description="name of the blob"
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-            <Button
-              disabled={!this.state.name}
-              marginRight={16}
-              appearance="primary"
-              intent="success"
-              onClick={this.post}
-            >
-              Submit
-            </Button>
-          </FormField>
-        </Dialog>
+        <FilePicker
+          multiple
+          width={250}
+          marginBottom={32}
+          onChange={files => this.post(files)}
+        />
         {this.content()}
       </div>
     );

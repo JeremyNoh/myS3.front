@@ -1,44 +1,44 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Projet FRONT myS3
 
-## Available Scripts
+Le but du projet est de concevoir une Interface au projet initial
+Vous etês sur le repositorie du FRONT réalisé en React.js pour l'installer / le lancer merci de suivre .
 
-In the project directory, you can run:
+- Git clone [https://github.com/JeremyNoh/myS3.front.git](https://github.com/JeremyNoh/myS3.front.git)
+- npm install
+- npm start
+- Go to your brower ==> http://localhost:3000/
 
-### `npm start`
+Attention : n'oubliez d'aller voir le projet Back pour le lancer en local !!
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Pour Accéder / Télécharger le back merci de vous rendre sur le repo Back de mon binôme [https://github.com/JeremyNoh/myS3Dev](https://github.com/JeremyNoh/myS3Dev)
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+ps : le back n'est pas complet ... XD donc soyez indulgent
 
-### `npm test`
+## Présentation
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Accéder à votre espace perso et vos fichier,
 
-### `npm run build`
+Créer & réaliser par
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [Jeremy Nohile](https://github.com/JeremyNoh)
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Fonctionnalité
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### USER
 
-### `npm run eject`
+- Register
+- Signin
+- Modifier ses infos
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Bucket
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- ajout d'un Bucket
+- Supprerssion d'un Bucket
+- Modification d'un Bucket
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Blob
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Visualisation de ses Blobs
+- ajout d'un Blob ( pas entierrement fini ...)
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Merci à vous 😉

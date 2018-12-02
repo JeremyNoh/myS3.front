@@ -20,7 +20,8 @@ class App extends Component {
 
     this.state = {
       isConnected: false,
-      user: null
+      user: null,
+      idBucket: null
     };
 
     this.checkUser();
@@ -56,6 +57,12 @@ class App extends Component {
     this.setState({
       isConnected: true,
       user
+    });
+  };
+
+  handlBucket = idBucket => {
+    this.setState({
+      idBucket
     });
   };
 
@@ -142,10 +149,20 @@ class App extends Component {
             />
           )}
           {isConnected && (
-            <Route path="/bucket" render={props => <Bucket {...props} />} />
+            <Route
+              path="/bucket"
+              render={props => (
+                <Bucket {...props} handlBucket={this.handlBucket} />
+              )}
+            />
           )}
           {isConnected && (
-            <Route path="/blob" render={props => <Blob {...props} />} />
+            <Route
+              path="/blob"
+              render={props => (
+                <Blob {...props} idBucket={this.state.idBucket} />
+              )}
+            />
           )}
         </>
       </Router>

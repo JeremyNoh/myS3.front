@@ -34,9 +34,7 @@ export default class Login extends Component {
         duration: 3
       });
       this.props.handleUser(json.data.user, json.meta);
-      this.setState({ success: true }, () => {
-        this.goToDashboard();
-      });
+      this.setState({ success: true });
     } else {
       this.setState({ password: "" });
       toaster.danger(`${(json.err.description, json.err.fields)}`, {
